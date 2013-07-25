@@ -2,11 +2,11 @@
 
 void userSignalRates(float gridVolume, float area, float volume, const int cellType, float* rates, __global const float* species, __global const float* signals)
 {
-    %s
+    $sigRate
 }
 void userSpecRates(float gridVolume, float area, float volume, const int cellType, __global float* rates, __global const float* species, __global const float* signals)
 {
-    %s
+    $specRate
 }
 
 __kernel void gridCells(const float gridOrigx,
@@ -42,7 +42,7 @@ __kernel void gridCells(const float gridOrigx,
                 int4 offset = {i,j,k,0};
                 int4 ind = idx + offset;
                 // Is the neighbourhood node in the grid?
-                int inGrid = (int)(ind.x>=0 && ind.x<gridDimx && ind.y>=0 && ind.y<gridDimy && ind.z>=0 and ind.z<gridDimz);
+                int inGrid = (int)(ind.x>=0 && ind.x<gridDimx && ind.y>=0 && ind.y<gridDimy && ind.z>=0 && ind.z<gridDimz);
                 int flatidx = ind.z + ind.y*gridDimz + ind.x*gridDimz*gridDimy;
                 // if in grid put index, else zero
                 indices[base + k + j*2 + i*4] = inGrid * flatidx;
@@ -150,7 +150,7 @@ __kernel void signalRates(const int numSignals,
     __global const float* species = cellSpecLevels+specbase;
     __global const float* signals = cellSignalLevels+sigbase;
 
-    float cellSigRates[%i];
+    float cellSigRates[$num_signals];
     userSignalRates(gridVolume, areas[id], volumes[id], cellType, cellSigRates, species, signals);
 
     // Iterate over 8 nearest grid nodes
