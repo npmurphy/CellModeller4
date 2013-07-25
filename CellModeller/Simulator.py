@@ -201,6 +201,8 @@ visualised.
         if self.integ:
             self.integ.step(self.dt)
 
+        # This is copied like this because new cells will be created and added
+        # to the dict during the run of the loop
         states = dict(self.cellStates)
         for (cid,state) in states.items():
             if state.divideFlag:
