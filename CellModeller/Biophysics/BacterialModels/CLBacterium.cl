@@ -4,6 +4,17 @@
 #define ANG_LIMIT ((float)(5.f*3.14159f/180.f))
 #define ISQRT2 ((float)(1.f/sqrt(2.f)))
 
+#define debug(x) x
+//#define debug(x)
+//debug(printf("Print some value %d", i));
+
+/* This kind of thing is not allowed in opencl 1.2
+#if DEBUG  
+#define printf(...) printf(...)
+#else 
+#define printf(...)
+#endif*/
+
 // multiply a matrix and a vector
 //  m -- 4x4 matrix
 //  v -- 4-vector
