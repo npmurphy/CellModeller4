@@ -50,8 +50,10 @@ visualised.
             self.module.setup(self)
             import time
             self.startTime = time.localtime()
-            self.pickleFileRoot = pickleFileRoot if pickleFileRoot else self.moduleName + '-' + time.strftime('%H-%M-%d-%m-%y', self.startTime)
+            self.pickleFileRoot = pickleFileRoot if pickleFileRoot else self.moduleName + '-' + time.strftime('%H-%M-%S-%d-%m-%y', self.startTime)
             self.pickleDir = os.path.join('data', self.pickleFileRoot)
+            if not os.path.exists('data'):
+                os.makedirs('data')
             os.mkdir(self.pickleDir) # raises OSError if dir already exists
             # write a copy of the model into the dir (for reference)
             self.moduleStr = open(self.module.__file__, 'rU').read()
