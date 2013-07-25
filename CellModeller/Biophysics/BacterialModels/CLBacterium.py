@@ -959,13 +959,6 @@ class CLBacterium:
             if not self.jitter_z: jitter[2] = 0.0
             cdir[0:3] += jitter
             cdir /= numpy.linalg.norm(cdir)
-            self.cell_dirs[a] = cdir
-
-            cdir = numpy.array(parent_dir)
-            jitter = numpy.random.uniform(-0.001,0.001,3)
-            if not self.jitter_z: jitter[2] = 0.0
-            cdir[0:3] += jitter
-            cdir /= numpy.linalg.norm(cdir)
             self.cell_dirs[b] = cdir
         else:
             cdir = numpy.array(parent_dir)
