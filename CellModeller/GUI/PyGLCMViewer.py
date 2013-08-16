@@ -83,6 +83,7 @@ class PyGLCMViewer(PyGLWidget):
             if self.record:
                 if (self.frameNo%5)==0:
                     #self.setSnapshotCounter(self.frameNo)
+                    self.updateGL()
                     self.saveSnapshot()
     
     def saveSnapshot(self):
