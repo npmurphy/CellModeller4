@@ -946,23 +946,22 @@ class CLBacterium:
         parent_rad = self.cell_rads[i]
         parent_len = self.cell_lens[i]
 
-        daughter_len = parent_len/2.0 - parent_rad #- 0.025
-        daughter_offset = daughter_len/2.0 + parent_rad
-        center_offset = tuple([parent_dir[k]*daughter_offset for k in range(4)])
+        divide_point = numpy.random.normal(0.5,0.05) # make division a bit more random
+        if divide_point <= 0.1:
+            divide_point = 0.5
+        daughter1_len = (parent_len * divide_point) - parent_rad
+        daughter2_len = (parent_len * (1 - divide_point)) - parent_rad
+        daughter1_offset = (daughter1_len/2.0) + parent_rad
+        daughter2_offset = (daughter2_len/2.0) + parent_rad
+        center1_offset = tuple([parent_dir[k]*daughter1_offset for k in range(4)])
+        center2_offset = tuple([parent_dir[k]*daughter2_offset for k in range(4)])
 
-        self.cell_centers[a] = tuple([(parent_center[k] - center_offset[k]) for k in range(4)])
-        self.cell_centers[b] = tuple([(parent_center[k] + center_offset[k]) for k in range(4)])
+        self.cell_centers[a] = tuple([(parent_center[k] - center1_offset[k]) for k in range(4)])
+        self.cell_centers[b] = tuple([(parent_center[k] + center2_offset[k]) for k in range(4)])
 
         if not self.alternate_divisions:
             cdir = numpy.array(parent_dir)
-            jitter = numpy.random.uniform(-0.001,0.001,3)
-            if not self.jitter_z: jitter[2] = 0.0
-            cdir[0:3] += jitter
-            cdir /= numpy.linalg.norm(cdir)
-            self.cell_dirs[a] = cdir
-
-            cdir = numpy.array(parent_dir)
-            jitter = numpy.random.uniform(-0.001,0.001,3)
+            jitter = numpy.random.uniform(-0.01,0.01,3)
             if not self.jitter_z: jitter[2] = 0.0
             cdir[0:3] += jitter
             cdir /= numpy.linalg.norm(cdir)
@@ -976,8 +975,8 @@ class CLBacterium:
             self.cell_dirs[b] = cdir
 
 
-        self.cell_lens[a] = daughter_len
-        self.cell_lens[b] = daughter_len
+        self.cell_lens[a] = daughter1_len
+        self.cell_lens[b] = daughter2_len
         self.cell_rads[a] = parent_rad
         self.cell_rads[b] = parent_rad
 
@@ -986,8 +985,8 @@ class CLBacterium:
         self.parents[b] = a
 
         vols = self.cell_vols_dev.get()
-        daughter_vol = vols[i] / 2.0
-        vols[a] = daughter_vol
+        daughter_vol = vols[i] * divide_point
+        vols[a] = vols[i] - daughter_vol
         vols[b] = daughter_vol
         self.cell_vols_dev.set(vols)
 
