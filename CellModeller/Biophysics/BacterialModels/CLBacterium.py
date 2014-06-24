@@ -961,10 +961,17 @@ class CLBacterium:
 
         if not self.alternate_divisions:
             cdir = numpy.array(parent_dir)
-            jitter = numpy.random.uniform(-0.01,0.01,3)
-            if not self.jitter_z: jitter[2] = 0.0
-            cdir[0:3] += jitter
-            cdir /= numpy.linalg.norm(cdir)
+            jitter_phi, jitter_theta = numpy.random.normal(0,0.0001,2)
+            d_phi = numpy.arctan2(cdir[1], cdir[0]) + jitter_phi
+            if self.jitter_z:
+                d_theta = numpy.arccos(cdir[2]) + jitter_theta
+                cdir[0] = numpy.sin(d_theta) * numpy.cos(d_phi)
+                cdir[1] = numpy.sin(d_theta) * numpy.sin(d_phi)
+                cdir[2] = numpy.cos(d_theta) 
+            else:
+                cdir[0] = numpy.cos(d_phi)
+                cdir[1] = numpy.sin(d_phi)
+                cdir[2] = 0
             self.cell_dirs[b] = cdir
         else:
             cdir = numpy.array(parent_dir)
