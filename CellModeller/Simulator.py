@@ -212,6 +212,7 @@ visualised.
 
         states = dict(self.cellStates)
         for (cid,state) in states.items():
+            self.reg.step_cell(self.dt, state)
             if state.divideFlag:
                 self.divide(state)
 
